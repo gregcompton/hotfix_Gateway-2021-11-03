@@ -9,26 +9,42 @@ def restart_service(service):
     try:
         cmd = 'systemctl restart ' + service + '.service'
         os.system(cmd)
+        print(service, ' service was restarted.')
     except Exception as e:
         print.warning('unable to restart service' + e)
 
 
 def main():
-    current_path = '/opt/hyper/base/current_versions.json'
+    current_versions_path = '/opt/hyper/base/current_versions.json'
+    firmware_config_path = '/opt/hyper/base/firmware_config.json'
 
-    with open(current_path, 'r+') as current_file:
+    print("Fixing curent_versions.json...")
+    with open(current_versions_path, 'r+') as current_file:
+        current = json.load(current_file)
+    print(current)
+    current['thermocouple']['version'] = 1
+    print(current)
+    os.remove(current_versions_path)
+    with open(current_versions_path, "a") as current_file:
+        current_file.write(json.dumps(current))
+
+    print("\nFixing firmware_config.json...")
+    with open(firmware_config_path, 'r+') as current_file:
+        current = json.load(current_file)
+    print(current)
+    print(current['THERMOCOUPLE']['version'])
+    current['THERMOCOUPLE']['version'] = 1
+    print(current)
+    os.remove(firmware_config_path)
+    with open(firmware_config_path, "a") as current_file:
+        current_file.write(json.dumps(current))
+
+    print('\nConfirming file contents...')
+    with open(firmware_config_path, 'r+') as current_file:
         current = json.load(current_file)
 
-    print(current)
 
-    current['thermocouple']['version'] = 1
 
-    print(current)
-
-    os.remove(current_path)
-
-    with open(current_path, "a") as current_file:
-        current_file.write(json.dumps(current))
 
     restart_service('hyperbase')
 
