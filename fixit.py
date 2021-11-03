@@ -18,34 +18,48 @@ def main():
     current_versions_path = '/opt/hyper/base/current_versions.json'
     firmware_config_path = '/opt/hyper/base/firmware_config.json'
 
+    print('\n********************************************\n')
+
     print("Fixing curent_versions.json...")
     with open(current_versions_path, 'r+') as current_file:
         current = json.load(current_file)
-    print(current)
+    print('Before fix: ', current)
     current['thermocouple']['version'] = 1
-    print(current)
+    print()
+    print('After fix: ', current)
     os.remove(current_versions_path)
     with open(current_versions_path, "a") as current_file:
         current_file.write(json.dumps(current))
 
-    print("\nFixing firmware_config.json...")
+    print('\n********************************************\n')
+
+    print("Fixing firmware_config.json...")
     with open(firmware_config_path, 'r+') as current_file:
         current = json.load(current_file)
-    print(current)
-    print(current['THERMOCOUPLE']['version'])
+    print('Before fix: ', current)
+    print()
     current['THERMOCOUPLE']['version'] = 1
-    print(current)
+    print('After fix: ', current)
     os.remove(firmware_config_path)
     with open(firmware_config_path, "a") as current_file:
         current_file.write(json.dumps(current))
 
-    print('\nConfirming file contents...')
+    print('\n********************************************\n')
+
+    print('Confirming file contents...')
+    with open(current_versions_path, 'r+') as current_file:
+        current = json.load(current_file)
+        print("\ncurrent_versions.json contents: ")
+        for device in current:
+            print('\t', device, current[device])
     with open(firmware_config_path, 'r+') as current_file:
         current = json.load(current_file)
+        print("\nfirmware_config.json contents: ")
+        for device in current:
+            print('\t', device, current[device])
 
 
-
-
+    print('\n********************************************\n')
     restart_service('hyperbase')
 
     print("\nThat's it. Thermocouple should not get stuck in an endless update loop now")
