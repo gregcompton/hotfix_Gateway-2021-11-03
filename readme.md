@@ -12,7 +12,7 @@ In `current_versions.json` update `{"thermocouple": {"version":2}}` to `{"thermo
 How to install / run:
 
 - log in as gateway user (or any user with sudo privileges)
-- enter `sudo su`
+- enter `sudo su` then enter gateway user password
 - enter `cd /opt`
 - enter `git clone https://github.com/gregcompton/xbeeBasicListener.git`
 - enter `cd hotfix_Gateway-2021-11-03`
